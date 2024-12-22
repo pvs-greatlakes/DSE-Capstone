@@ -118,6 +118,32 @@ def check_linearity(x1, df, title, y1):
     import seaborn           as sns    
     sns.regplot(x = x1, y= y1, data= df, logistic= True).set_title(title)
     plt.show()
+def  draw_countplot(df, i, var, target):
+     import  matplotlib.pyplot   as  plt
+     import  seaborn             as  sns
+     print("\n{0}: Variable, {1}".format(i, var))
+     x         =  df[var]
+     y         =  df[target]
+     ttile     =  "Bar Chart for the variable: {}".format(var) 
+     plt.title(ttile)    
+     sns.countplot(x = x, hue = y, data = df)
+     plt.xticks(rotation = 90)
+     plt.show()
+     
+def  draw_boxplot(df, i, var, target):
+     import  matplotlib.pyplot   as  plt
+     import  seaborn             as  sns
+     print("\n{0}: Variable, {1}".format(i, var))
+     x         =  df[var]
+     y         =  df[target]
+     ttile     =  "Boxplot for the variable: {}".format(var) 
+     plt.title(ttile)    
+     sns.boxplot(x = x, hue = y, data = df)
+     plt.xticks(rotation = 90)
+     plt.show()    
+def IsFloat(x):
+    from pandas.api.types import is_float_dtype
+    return is_float_dtype(x)
 def  build_LR(df, X, y, target):
     '''
     Assumptions Check for Logistic Regression
@@ -234,6 +260,13 @@ def  build_LR(df, X, y, target):
     print("\nInterpretation")
     print("\nThe probability of the event happening")
     print(ODDs_Ratio_imp_df)
+    for i, var in enumerate(ODDs_Ratio_imp_values,1):
+        print(' i ', i, 'var ', var)
+        if df.dtypes[var] == 'int64':
+           draw_countplot(df, i, var, target)
+        elif df.dtypes[var] == 'float64':            
+           draw_boxplot(df, i, var, target)
+        
 def  build_models(df, Xcols, ycols, classlist):
     import  pandas                  as      pd
     from    sklearn.model_selection import  train_test_split
@@ -314,6 +347,7 @@ def  build_models(df, Xcols, ycols, classlist):
     if  best_model == 'LR':
         target   =   ycols[0]
         build_LR(df, X_train_SMOTE, y_train_SMOTE, target)
+
   
     
     
